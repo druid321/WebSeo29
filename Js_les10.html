@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Les_slid</title>
+</head>
+<body>
+<div id="app">
+
+</div>
+<script>
+
+    const imagesArr = [
+        'img/IMG_2888.JPG',
+        'img/IMG_2897.JPG',
+        'img/IMG_20180326_122909.jpg'
+    ];
+    function getSlider(parent, images, size, currentSlide = 0) {
+        // if(currentSlide > images.length)
+        const container = document.createElement('div');
+        container.style=`width:${size}px; border: 1px solid;height:${size}px;margin:auto;overflow: hidden;position: relative`;
+        container.className = 'container';
+        const left = document.createElement('div');
+        left.innerText = '<';
+        left.style='position: absolute; left:0;top:0;bottom:0;margin:auto;cursor:pointer;' +
+            'display:flex;align-items:center;background: rgba(51, 49, 49, 0.37);color:white;padding:5px';
+        left.onclick = (e) => {
+            // console.log(e.target.nextElementSibling.nextElementSibling);
+            // console.log(e.target.parentElement.lastElementChild);
+            // const children = e.target.parentElement.children;
+            // console.log(children[children.length-1]);
+            const children = e.target.parentElement.children;
+            const listBlock = children[children.length-1];
+            const leftPosition = parseInt(listBlock.style.left);
+            if (leftPosition === -size*(images.length-1)) {
+                return;
+            }
+            listBlock.style.left = parseInt(listBlock.style.left) - size + 'px';
+            console.log(parseInt(listBlock.style.left));
+        };
+        container.appendChild(left);
+        const right = document.createElement('div');
+        right.innerText = '>';
+        right.style='position: absolute; right:0;top:0;bottom:0;margin:auto;' +
+            'cursor:pointer;display:flex;align-items:center;background: rgba(51, 49, 49, 0.37);color:white;padding:5px';
+        right.onclick = event => {
+            const listBlock = event.target.parentElement.lastElementChild;
+            const leftPosition = parseInt(listBlock.style.left);
+            if(leftPosition === 0) return;
+            listBlock.style.left = leftPosition + size + 'px';
+        };
+        container.appendChild(right);
+        const circles = document.createElement('div');
+        circles.style='position: absolute; bottom: 10px; left:0;right:0;margin:auto;text-align:center';
+        const list = document.createElement('div');
+        list.style.height='100%';
+        list.style.transition='1s';
+        list.style.position='absolute';
+        list.style.left='0px';
+        list.style.zIndex='-1';
+        list.style.display="flex";
+        list.className = 'list';
+        list.style.width=`${size*images.length}px`;
+        images.forEach((image, index) => {
+            const item = document.createElement('div');
+            item.className = 'item';
+            item.style.width=`${size*images.length}px`;
+            item.style.backgroundImage = `url(${image})`;
+            item.style.backgroundSize = `cover`;
+            list.appendChild(item);
+            const circle = document.createElement('span');
+            circle.style = 'margin: 0 5px;width:10px;height:10px;border:2px solid white;' +
+                'border-radius: 50%;display: inline-block;';
+            if(index === currentSlide) circle.style.backgroundColor = 'white';
+            circles.appendChild(circle);
+        });
+        container.appendChild(circles);
+        container.appendChild(list);
+        parent.appendChild(container);
+        console.log(container);
+    }
+    getSlider(app, imagesArr, 400);
+</script>
+
+</body>
+</html>
